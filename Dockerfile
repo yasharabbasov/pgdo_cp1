@@ -2,8 +2,8 @@ FROM tomcat:8.0-alpine
 
 LABEL maintainer=”yashar.linkoln@gmail.com”
 
-COPY sample.war /usr/local/tomcat/webapps/
+ADD sample.war /usr/local/tomcat/webapps/
 
-EXPOSE 8081
+EXPOSE 8080
 
 CMD [“catalina.sh”, “run”]

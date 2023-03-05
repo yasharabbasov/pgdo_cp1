@@ -7,21 +7,14 @@ pipeline {
                 sh 'ls' 
            }
         }
-        stage('Docker build') {
-            steps{
-                sh 'docker build -t ${JOB_NAME}:${BUILD_NUMBER} .'
-                sh 'docker tag ${JOB_NAME}:${BUILD_NUMBER} yasharabbasov/${JOB_NAME}:${BUILD_NUMBER} '
-                sh 'docker tag ${JOB_NAME}:${BUILD_NUMBER} yasharabbasov/${JOB_NAME}:latest '
-            }
+        stage('Build Docker Image') {
+            dockerImage = docker.build("yasharabbasov/pgdo_cp1:${env.BUILD_NUMBER}")
         }
-        stage('Docker push') {
-            steps{
-                withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerauth')]) {
-                  sh 'docker login -u yasharabbasov -p ${dockerauth}'
-                  sh 'docker push yasharabbasov/${JOB_NAME}:${BUILD_NUMBER}'
-                  sh 'docker push yasharabbasov/${JOB_NAME}:latest'
-                  sh 'docker rmi ${JOB_NAME}:${BUILD_NUMBER} yasharabbasov/${JOB_NAME}:${BUILD_NUMBER} yasharabbasov/${JOB_NAME}:latest'
-                }      
+        stage('Push Image to Docker hub') {
+            echo "Docker Image Tag Name ---> ${dockerImageTag}"
+            docker.withRegistry('', 'dockerhub') {
+                dockerImage.push("${env.BUILD_NUMBER}")
+                dockerImage.push("latest")
             }
         }
         stage('Deploy container with Ansible') {

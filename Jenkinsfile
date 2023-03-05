@@ -19,10 +19,10 @@ node{
         }
     }
     stage('Clean and run the container') {
-        sh "docker stop ${app}"
-        sh "docker rm -f ${app}"
+        sh "docker stop ${userid}/${app}"
+        sh "docker rm -f ${userid}/${app}"
         sh "docker rmi -f ${userid}/${app}:${env.BUILD_NUMBER}"
-        sh "docker run -it -d --name ${app} -p 8081:8080 ${userid}/${app}"
+        sh "docker run -it -d --name ${app} -p 80:8080 ${userid}/${app}"
     }
     stage('Test the app') {
         sh "curl localhost"

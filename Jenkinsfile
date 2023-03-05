@@ -22,7 +22,7 @@ node{
         sh "docker run -d --name tomcat-container -p 8081:8080 ${userid}/${app}"
     }
     stage('Test the app') {
-        sh "curl http://localhost:8081/sample"
+        sh "curl http://localhost:8081/sample/hello.jsp"
     }
     stage('Prune docker resources') {
         sh "docker stop tomcat-container"

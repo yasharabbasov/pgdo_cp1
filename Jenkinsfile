@@ -18,10 +18,7 @@ node{
             dockerImage.push("latest")
         }
     }
-    stage('Clean and run the container') {
-        sh "docker stop ${userid}/${app}"
-        sh "docker rm -f ${userid}/${app}"
-        sh "docker rmi -f ${userid}/${app}:${env.BUILD_NUMBER}"
+    stage('Run the container') {
         sh "docker run -it -d --name ${app} -p 80:8080 ${userid}/${app}"
     }
     stage('Test the app') {

@@ -23,7 +23,7 @@ node{
     }
     stage('Test the app') {
         def url = "http://localhost:8081/sample/hello.jsp"
-        def response = sh(script: "curl -s -w "%{http_code}" ${url}", returnStdout: true)
+        def response = sh(script: "curl -s -w '%{http_code}' ${url}", returnStdout: true)
         echo "HTTP response status code: $code"
         if (!(response.contains('Hello'))) {
             error ('URL status different of 200. Exiting script.')

@@ -14,15 +14,21 @@ pipeline {
                 sh 'mvn clean install'
             }
         }
-        stage('Docker build, tag and push') {
-            def app = "pgdo_cp1"
-            def dockerid = "yasharabbasov"
-            def dockerImageTag = "${dockerid}/${app}:${env.BUILD_NUMBER}"
-            dockerImage = docker.build("${dockerid}/${app}:${env.BUILD_NUMBER}")
-            echo "Docker Image Tag Name ---> ${dockerImageTag}"
-                docker.withRegistry('', 'dockerhub') {
-                dockerImage.push("${env.BUILD_NUMBER}")
-                dockerImage.push("latest")
+        stage('Docker build') {
+            steps{
+                sh 'docker build -t ${JOB_NAME}:${BUILD_NUMBER} .'
+                sh 'docker tag ${JOB_NAME}:${BUILD_NUMBER} yasharabbasov/${JOB_NAME}:${BUILD_NUMBER} '
+                sh 'docker tag ${JOB_NAME}:${BUILD_NUMBER} yasharabbasov/${JOB_NAME}:latest '
+            }
+        }
+        stage('Docker push') {
+            steps{
+                withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerauth')]) {
+                  sh 'docker login -u yasharabbasov -p ${dockerauth}'
+                  sh 'docker push yasharabbasov/${JOB_NAME}:${BUILD_NUMBER}'
+                  sh 'docker push yasharabbasov/${JOB_NAME}:latest'
+                  sh 'docker rmi ${JOB_NAME}:v1.${BUILD_NUMBER} yasharabbasov/${JOB_NAME}:${BUILD_NUMBER} yasharabbasov/${JOB_NAME}:latest'
+                }      
             }
         }
         stage('Deploy container with Ansible') {

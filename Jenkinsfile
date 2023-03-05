@@ -16,18 +16,18 @@ pipeline {
         }
         stage('Docker build') {
             steps{
-                sh 'docker build -t ${JOB_NAME}:${BUILD_NUMBER} .'
-                sh 'docker tag ${JOB_NAME}:${BUILD_NUMBER} yasharabbasov/${JOB_NAME}:${BUILD_NUMBER} '
-                sh 'docker tag ${JOB_NAME}:${BUILD_NUMBER} yasharabbasov/${JOB_NAME}:latest '
+                sh 'docker build -t ${JOB_NAME}:v1.${BUILD_NUMBER} .'
+                sh 'docker tag ${JOB_NAME}:v1.${BUILD_NUMBER} yasharabbasov/${JOB_NAME}:v1.${BUILD_NUMBER} '
+                sh 'docker tag ${JOB_NAME}:v1.${BUILD_NUMBER} yasharabbasov/${JOB_NAME}:latest '
             }
         }
         stage('Docker push') {
             steps{
                 withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerauth')]) {
                   sh 'docker login -u yasharabbasov -p ${dockerauth}'
-                  sh 'docker push yasharabbasov/${JOB_NAME}:${BUILD_NUMBER}'
+                  sh 'docker push yasharabbasov/${JOB_NAME}:v1.${BUILD_NUMBER}'
                   sh 'docker push yasharabbasov/${JOB_NAME}:latest'
-                  sh 'docker rmi ${JOB_NAME}:v1.${BUILD_NUMBER} yasharabbasov/${JOB_NAME}:${BUILD_NUMBER} yasharabbasov/${JOB_NAME}:latest'
+                  sh 'docker rmi ${JOB_NAME}:v1.${BUILD_NUMBER} yasharabbasov/${JOB_NAME}:v1.${BUILD_NUMBER} yasharabbasov/${JOB_NAME}:latest'
                 }      
             }
         }

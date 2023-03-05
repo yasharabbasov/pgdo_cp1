@@ -33,8 +33,4 @@ node{
         sh "docker stop tomcat-container"
         sh "docker rm -f tomcat-container"
     }
-    post {
-        success { echo 'Project build successfully!' }
-        failure { echo 'Project build failed!' }
-    }  
 }

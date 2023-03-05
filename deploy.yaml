@@ -1,0 +1,16 @@
+---
+- hosts: all
+  become: true
+  
+  tasks:
+     - name: Stop container
+       shell: docker stop dockertomcat
+       
+     - name: Remove container
+       shell: docker rm -f dockertomcat
+       
+     - name: Remove image
+       shell: docker rmi -f yasharabbasov/sample
+       
+     - name: Create container
+       shell: docker run -d --name dockertomcat -p 8080:8080 yasharabbasov/pgdo_cp1

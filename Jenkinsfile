@@ -22,7 +22,7 @@ node{
         sh "docker stop ${app}"
         sh "docker rm -f ${app}"
         sh "docker rmi -f ${userid}/${app}:${env.BUILD_NUMBER}"
-        sh "docker run -d --name ${app} -p 80:80 ${userid}/${app}"
+        sh "docker run -it -d --name ${app} -p 8081:8080 ${userid}/${app}"
     }
     stage('Test the app') {
         sh "curl localhost"

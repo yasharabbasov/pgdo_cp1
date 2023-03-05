@@ -9,7 +9,7 @@ node{
         sh 'ls' 
     }
     stage('Build Docker Image') {
-        dockerImage = docker.build("${JOB_NAME}:${env.BUILD_NUMBER}")
+        dockerImage = docker.build("${dockerImageTag}")
     }
     stage('Push Image to Docker hub') {
         echo "Docker Image Tag Name ---> ${dockerImageTag}"

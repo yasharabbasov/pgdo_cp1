@@ -25,7 +25,7 @@ node{
         sh "docker run -d --name ${app} -p 80:80 ${userid}/${app}"
     }
     stage('Test the app') {
-        sh "curl localhost:8081"
+        sh "curl localhost"
     }
     stage('Prune docker resources') {
         sh "docker image prune"

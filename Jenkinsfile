@@ -23,8 +23,7 @@ node{
     }
     stage('Test the app') {
         cmd = """
-          curl -s -X GET -H 'accept: */*' -w '{http_code}' \
-              'https://localhost:8081/sample/hello.jsp' 
+          curl -o /dev/null -s -w %{http_code} localhost:8081/sample/hello.jsp
         """
 
       status_code = sh(script: cmd, returnStdout: true).trim()

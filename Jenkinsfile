@@ -19,7 +19,7 @@ node{
         }
     }
     stage('Run the container') {
-        sh "docker run -itd 8081:8080 --name tomcat-container ${userid}/${app}"
+        sh "docker run -d --name tomcat-container -p 8081:8080 ${userid}/${app}"
     }
     stage('Test the app') {
         sh "curl http://localhost:8081"

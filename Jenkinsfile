@@ -6,7 +6,7 @@ pipeline {
     stages{
         stage('Git checkout') {
             steps {
-                git credentialsId: 'gitauth', url: 'github.com/yasharabbasov/pgdo_cp1.git'
+                git url:'https://github.com/yasharabbasov/pgdo_cp1.git',branch:'main' 
            }
         }
         stage('Maven build') {

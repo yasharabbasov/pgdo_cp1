@@ -22,10 +22,10 @@ node{
         sh "docker run -d --name tomcat-container -p 8081:8080 ${userid}/${app}"
     }
     stage('Test the app') {
-        def String url = "http://localhost:8081/sample/hello.jsp"
-        def (String response, int code) = sh(script: "curl -s -w '\\n%{response_code}' $url", returnStdout: true).trim().tokenize("\n")
+        def url = "http://localhost:8081/sample/hello.jsp"
+        def response = sh(script: 'curl -s -w "%{http_code}" $url', returnStdout: true)
         echo "HTTP response status code: $code"
-        if (code != 200) {
+        if (!(response.contains('Hello'))) {
             error ('URL status different of 200. Exiting script.')
         }
     }

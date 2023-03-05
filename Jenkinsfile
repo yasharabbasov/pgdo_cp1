@@ -19,13 +19,13 @@ node{
         }
     }
     stage('Run the container') {
-        sh "docker container run -it --publish 8081:8080 ${userid}/${app}"
+        sh "docker run -itd 8081:8080 --name tomcat-container ${userid}/${app}"
     }
     stage('Test the app') {
-        sh "curl localhost"
+        sh "curl http://localhost:8081"
     }
     stage('Prune docker resources') {
-        sh "docker image prune"
-        sh "docker container prune"
+        sh "docker stop tomcat-container"
+        sh "docker rm -f tomcat-container"
     }
 }

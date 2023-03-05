@@ -18,15 +18,17 @@ node{
             dockerImage.push("latest")
         }
     }
-    stage('Run container') {
+    stage('Clean and run the container') {
+        sh "docker stop ${app}"
+        sh "docker rm -f ${app}"
+        sh "docker rmi -f ${userid}/${app}:${env.BUILD_NUMBER}"
         sh "docker run -d --name ${app} -p 80:80 ${userid}/${app}"
     }
     stage('Test the app') {
         sh "curl localhost:8081"
     }
-    stage('Remove container stack') {
-        sh "docker stop ${app}"
-        sh "docker rm -f ${app}"
-        sh "docker rmi -f ${userid}/${app}:${env.BUILD_NUMBER}"
+    stage('Prune docker resources') {
+        sh "docker image prune"
+        sh "docker container prune"
     }
 }

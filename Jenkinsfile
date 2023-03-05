@@ -19,7 +19,7 @@ node{
         }
     }
     stage('Run the container') {
-        sh "docker run -it -d --name ${app} -p 80:8080 ${userid}/${app}"
+        sh "docker run -it -d --name ${app} -p 8081:8081 ${userid}/${app}"
     }
     stage('Test the app') {
         sh "curl localhost"

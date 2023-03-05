@@ -8,13 +8,17 @@ pipeline {
            }
         }
         stage('Build Docker Image') {
-            dockerImage = docker.build("yasharabbasov/pgdo_cp1:${env.BUILD_NUMBER}")
+            steps {
+                dockerImage = docker.build("yasharabbasov/pgdo_cp1:${env.BUILD_NUMBER}")
+            }
         }
         stage('Push Image to Docker hub') {
-            echo "Docker Image Tag Name ---> ${dockerImageTag}"
-            docker.withRegistry('', 'dockerhub') {
-                dockerImage.push("${env.BUILD_NUMBER}")
-                dockerImage.push("latest")
+            steps {
+                echo "Docker Image Tag Name ---> ${dockerImageTag}"
+                docker.withRegistry('', 'dockerhub') {
+                    dockerImage.push("${env.BUILD_NUMBER}")
+                    dockerImage.push("latest")
+                }
             }
         }
         stage('Deploy container with Ansible') {

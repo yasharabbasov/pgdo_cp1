@@ -3,12 +3,7 @@ node{
     def userid = "yasharabbasov"
     def dockerImage
     def dockerImageTag = "${userid}/${app}:${env.BUILD_NUMBER}"
-    stage('Clean up') {
-        cleanWs()
-        sh "docker container prune"
-        sh "docker image prune"
-        sh "docker volume prune"
-    }
+
     stage('Git checkout') {
         git url:"https://github.com/${userid}/${app}.git",branch:'main'
         sh 'ls' 

@@ -22,10 +22,8 @@ node{
         sh "docker run -d --name tomcat-container -p 8081:8080 ${userid}/${app}"
     }
     stage('Test the app') {
-        def url = ""
-        def response = sh(script: 'curl -s -w "%{http_code}\n" http://localhost:8081/sample/hello.jsp', returnStdout: true).trim()
-        echo "${response}"
-        if (!(response.contains('Hello'))) {
+        def response = sh(script: 'curl -o /dev/null -s -w "%{http_code}\n" localhost:8081/sample/hello.jsp', returnStdout: true)
+        if (response != 200) {
             error ('URL status different of 200. Exiting script.')
         }
     }
